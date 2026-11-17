@@ -48,9 +48,7 @@
     align-items: center;
     justify-content: center;
   }
-  .kanji-btn:hover {
-    background: #eef6ff;
-  }
+  .kanji-btn:hover { background: #eef6ff; }
   .kanji-btn.active {
     background: #2b7de9;
     color: #fff;
@@ -141,28 +139,12 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: opacity 0.15s, transform 0.1s;
   }
-  .btn:active {
-    transform: scale(0.97);
-  }
-  .btn-anim {
-    background: #ff9800;
-    color: #fff;
-  }
-  .btn-step {
-    background: #ffe0b2;
-    color: #e65100;
-  }
-  .btn-clear {
-    background: #eceff1;
-    color: #37474f;
-  }
-  .btn-done {
-    background: #e91e63;
-    color: #fff;
-    font-size: 17px;
-  }
+  .btn:active { transform: scale(0.97); }
+  .btn-anim { background: #ff9800; color: #fff; }
+  .btn-step { background: #ffe0b2; color: #e65100; }
+  .btn-clear { background: #eceff1; color: #37474f; }
+  .btn-done { background: #e91e63; color: #fff; font-size: 17px; }
   .color-palette {
     display: flex;
     gap: 10px;
@@ -197,11 +179,11 @@
     text-align: center;
   }
   .teacher-toggle {
-    background: none;
-    border: 1px solid #ccc;
-    color: #666;
-    font-size: 12px;
-    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid #bbb;
+    color: #555;
+    font-size: 13px;
+    padding: 8px 14px;
     border-radius: 20px;
     cursor: pointer;
   }
@@ -215,9 +197,7 @@
     text-align: left;
     font-size: 14px;
   }
-  .teacher-box.open {
-    display: block;
-  }
+  .teacher-box.open { display: block; }
   .teacher-row {
     display: flex;
     gap: 8px;
@@ -229,6 +209,8 @@
     font-size: 16px;
     border: 1px solid #bbb;
     border-radius: 8px;
+    user-select: text;
+    -webkit-user-select: text;
   }
   .teacher-row button {
     padding: 8px 14px;
@@ -239,6 +221,18 @@
     font-weight: bold;
     cursor: pointer;
   }
+  #generated-url-box {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 14px;
+    background: #f0f4f8;
+    border: 1px solid #bcccdc;
+    border-radius: 6px;
+    color: #102a43;
+    user-select: all;
+    -webkit-user-select: all;
+  }
 </style>
 </head>
 <body>
@@ -247,16 +241,12 @@
 
 <div class="main-area">
   <div class="canvas-wrapper">
-    <!-- 十字リーダー -->
     <svg class="grid-lines" viewBox="0 0 100 100">
       <line x1="50" y1="0" x2="50" y2="100" stroke="#b0bec5" stroke-width="0.8" stroke-dasharray="2,2" />
       <line x1="0" y1="50" x2="100" y2="50" stroke="#b0bec5" stroke-width="0.8" stroke-dasharray="2,2" />
     </svg>
-    <!-- 書き順SVG表示エリア -->
     <div id="kanji-svg"></div>
-    <!-- なぞり書きキャンバス -->
     <canvas id="draw-canvas" width="340" height="340"></canvas>
-    <!-- はなまる演出 -->
     <div id="hanamaru">
       <svg width="240" height="240" viewBox="0 0 200 200">
         <path d="M100,20 C115,5 135,15 130,35 C150,25 165,45 150,60 C175,60 180,85 160,95 C180,105 175,130 150,130 C165,145 150,165 130,155 C135,175 115,185 100,170 C85,185 65,175 70,155 C50,165 35,145 50,130 C25,130 20,105 40,95 C20,85 25,60 50,60 C35,45 50,25 70,35 C65,15 85,5 100,20 Z" fill="none" stroke="#e91e63" stroke-width="6"/>
@@ -269,11 +259,9 @@
 
   <div class="controls">
     <div class="status-bar" id="status-text">もじを えらんでね</div>
-
     <div class="control-group-title">① かきじゅんを たしかめる</div>
     <button class="btn btn-anim" id="btn-play-all">▶ ぜんぶの かきじゅんを見る</button>
     <button class="btn btn-step" id="btn-step">👣 1かくずつ すすむ</button>
-
     <div class="control-group-title" style="margin-top:4px;">② ゆびや ペンで なぞる（いろ）</div>
     <div class="color-palette">
       <button class="color-btn selected" style="background:#222;" data-color="#222222">くろ</button>
@@ -281,157 +269,154 @@
       <button class="color-btn" style="background:#1e88e5;" data-color="#1e88e5">あお</button>
       <button class="color-btn" style="background:#43a047;" data-color="#43a047">みどり</button>
     </div>
-
     <div class="control-group-title" style="margin-top:4px;">③ けす・おわり</div>
     <button class="btn btn-clear" id="btn-clear">🧹 ぜんぶ けす</button>
     <button class="btn btn-done" id="btn-done">💮 できた！はなまる</button>
   </div>
 </div>
 
-<!-- 先生用URL作成ツール -->
 <div class="teacher-panel">
   <button class="teacher-toggle" id="toggle-teacher">⚙ 先生用：あしたの漢字URLをつくる</button>
   <div class="teacher-box" id="teacher-box">
     <div>練習させたい漢字を続けて入力してください（例：<b>海絵森星雲</b>）</div>
     <div class="teacher-row">
-      <input type="text" id="custom-kanji-input" placeholder="ここに漢字を入力（最大10字ほど）">
-      <button id="generate-url-btn">URLをコピー</button>
+      <input type="text" id="custom-kanji-input" placeholder="ここに漢字を入力">
+      <button id="generate-url-btn">URLをつくる</button>
     </div>
-    <div id="generated-url-preview" style="margin-top:8px; font-size:12px; color:#2b7de9; word-break:break-all;"></div>
+    <input type="text" id="generated-url-box" readonly placeholder="ここにURLが出ます（クリックしてコピー）">
+    <div id="copy-msg" style="margin-top:4px; font-size:12px; color:#2b7de9;"></div>
   </div>
 </div>
 
 <script>
-  // URLパラメータから漢字を取得（なければデフォルトの6字）
-  const urlParams = new URLSearchParams(window.location.search);
-  const kParam = urlParams.get('k');
-  const defaultKanji = ['海', '絵', '森', '星', '雲', '道'];
-  const kanjiChars = (kParam && kParam.trim().length > 0)
+(function() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var kParam = urlParams.get('k');
+  var defaultKanji = ['海', '絵', '森', '星', '雲', '道'];
+  var kanjiChars = (kParam && kParam.trim().length > 0)
     ? Array.from(kParam.trim()).slice(0, 12)
     : defaultKanji;
 
-  const listEl = document.getElementById('kanji-list');
-  const svgContainer = document.getElementById('kanji-svg');
-  const statusText = document.getElementById('status-text');
-  const hanamaruEl = document.getElementById('hanamaru');
+  var listEl = document.getElementById('kanji-list');
+  var svgContainer = document.getElementById('kanji-svg');
+  var statusText = document.getElementById('status-text');
+  var hanamaruEl = document.getElementById('hanamaru');
 
-  let currentPaths = [];
-  let currentStepIndex = 0;
-  let animTimers = [];
+  var currentPaths = [];
+  var currentStepIndex = 0;
+  var animTimers = [];
 
-  // 上部の漢字ボタン生成
-  kanjiChars.forEach((char, idx) => {
-    const btn = document.createElement('button');
+  kanjiChars.forEach(function(char, idx) {
+    var btn = document.createElement('button');
     btn.className = 'kanji-btn' + (idx === 0 ? ' active' : '');
     btn.textContent = char;
-    btn.onclick = () => {
-      document.querySelectorAll('.kanji-btn').forEach(b => b.classList.remove('active'));
+    btn.onclick = function() {
+      document.querySelectorAll('.kanji-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       loadKanji(char);
     };
     listEl.appendChild(btn);
   });
 
-  // KanjiVGからSVGデータを取得
-  async function loadKanji(char) {
+  function loadKanji(char) {
     clearTimers();
     clearCanvas();
     hanamaruEl.classList.remove('show');
-    statusText.textContent = `「${char}」を よみこみ中...`;
+    statusText.textContent = '「' + char + '」を よみこみ中...';
 
-    const hex = char.codePointAt(0).toString(16).padStart(5, '0');
-    const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
+    var hex = char.codePointAt(0).toString(16).padStart(5, '0');
+    var url = 'https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/' + hex + '.svg';
 
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Not found');
-      const svgText = await res.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(svgText, 'image/svg+xml');
-      const paths = Array.from(doc.querySelectorAll('path'));
+    fetch(url)
+      .then(function(res) {
+        if (!res.ok) throw new Error('Not found');
+        return res.text();
+      })
+      .then(function(svgText) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(svgText, 'image/svg+xml');
+        var paths = Array.from(doc.querySelectorAll('path'));
 
-      svgContainer.innerHTML = '';
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      svg.setAttribute('viewBox', '0 0 109 109');
-      svg.style.width = '100%';
-      svg.style.height = '100%';
+        svgContainer.innerHTML = '';
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 109 109');
+        svg.style.width = '100%';
+        svg.style.height = '100%';
 
-      currentPaths = [];
-      paths.forEach((p, i) => {
-        // 下書き用の薄いグレーの線
-        const basePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        basePath.setAttribute('d', p.getAttribute('d'));
-        basePath.setAttribute('fill', 'none');
-        basePath.setAttribute('stroke', '#d8dee4');
-        basePath.setAttribute('stroke-width', '5');
-        basePath.setAttribute('stroke-linecap', 'round');
-        basePath.setAttribute('stroke-linejoin', 'round');
-        svg.appendChild(basePath);
+        currentPaths = [];
+        paths.forEach(function(p) {
+          var basePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          basePath.setAttribute('d', p.getAttribute('d'));
+          basePath.setAttribute('fill', 'none');
+          basePath.setAttribute('stroke', '#d8dee4');
+          basePath.setAttribute('stroke-width', '5');
+          basePath.setAttribute('stroke-linecap', 'round');
+          basePath.setAttribute('stroke-linejoin', 'round');
+          svg.appendChild(basePath);
 
-        // アニメーション用の色付き線
-        const animPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        animPath.setAttribute('d', p.getAttribute('d'));
-        animPath.setAttribute('fill', 'none');
-        animPath.setAttribute('stroke', '#ff7043');
-        animPath.setAttribute('stroke-width', '5.5');
-        animPath.setAttribute('stroke-linecap', 'round');
-        animPath.setAttribute('stroke-linejoin', 'round');
-        svg.appendChild(animPath);
+          var animPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          animPath.setAttribute('d', p.getAttribute('d'));
+          animPath.setAttribute('fill', 'none');
+          animPath.setAttribute('stroke', '#ff7043');
+          animPath.setAttribute('stroke-width', '5.5');
+          animPath.setAttribute('stroke-linecap', 'round');
+          animPath.setAttribute('stroke-linejoin', 'round');
+          svg.appendChild(animPath);
 
-        const len = animPath.getTotalLength();
-        animPath.style.strokeDasharray = len;
-        animPath.style.strokeDashoffset = len;
+          var len = animPath.getTotalLength();
+          animPath.style.strokeDasharray = len;
+          animPath.style.strokeDashoffset = len;
 
-        currentPaths.push({ el: animPath, len: len });
+          currentPaths.push({ el: animPath, len: len });
+        });
+
+        svgContainer.appendChild(svg);
+        currentStepIndex = 0;
+        statusText.textContent = '「' + char + '」（ぜんぶで ' + currentPaths.length + ' かく）';
+      })
+      .catch(function() {
+        svgContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:220px;color:#e0e0e0;">' + char + '</div>';
+        currentPaths = [];
+        statusText.textContent = '「' + char + '」を なぞってみよう';
       });
-
-      svgContainer.appendChild(svg);
-      currentStepIndex = 0;
-      statusText.textContent = `「${char}」（ぜんぶで ${currentPaths.length} かく）`;
-    } catch (e) {
-      svgContainer.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:220px;color:#e0e0e0;">${char}</div>`;
-      currentPaths = [];
-      statusText.textContent = `「${char}」を なぞってみよう`;
-    }
   }
 
   function clearTimers() {
-    animTimers.forEach(t => clearTimeout(t));
+    animTimers.forEach(function(t) { clearTimeout(t); });
     animTimers = [];
   }
 
   function resetAnimPaths() {
-    currentPaths.forEach(item => {
+    currentPaths.forEach(function(item) {
       item.el.style.transition = 'none';
       item.el.style.strokeDashoffset = item.len;
     });
   }
 
-  function animateSingleStroke(index, duration = 550) {
+  function animateSingleStroke(index, duration) {
     if (!currentPaths[index]) return;
-    const item = currentPaths[index];
+    var item = currentPaths[index];
     item.el.style.transition = 'none';
     item.el.style.strokeDashoffset = item.len;
     item.el.getBoundingClientRect();
-    item.el.style.transition = `stroke-dashoffset ${duration}ms ease-in-out`;
+    item.el.style.transition = 'stroke-dashoffset ' + duration + 'ms ease-in-out';
     item.el.style.strokeDashoffset = '0';
   }
 
-  // 全画連続アニメーション
-  document.getElementById('btn-play-all').onclick = () => {
+  document.getElementById('btn-play-all').onclick = function() {
     if (currentPaths.length === 0) return;
     clearTimers();
     resetAnimPaths();
     currentStepIndex = 0;
 
-    currentPaths.forEach((_, idx) => {
-      const t = setTimeout(() => {
-        statusText.textContent = `${idx + 1} かくめ`;
+    currentPaths.forEach(function(_, idx) {
+      var t = setTimeout(function() {
+        statusText.textContent = (idx + 1) + ' かくめ';
         animateSingleStroke(idx, 500);
         currentStepIndex = idx + 1;
         if (idx === currentPaths.length - 1) {
-          setTimeout(() => {
-            statusText.textContent = `ぜんぶで ${currentPaths.length} かく！なぞってみよう`;
+          setTimeout(function() {
+            statusText.textContent = 'ぜんぶで ' + currentPaths.length + ' かく！なぞってみよう';
           }, 600);
         }
       }, idx * 650);
@@ -439,33 +424,31 @@
     });
   };
 
-  // 1画ずつ進む
-  document.getElementById('btn-step').onclick = () => {
+  document.getElementById('btn-step').onclick = function() {
     if (currentPaths.length === 0) return;
     clearTimers();
     if (currentStepIndex >= currentPaths.length) {
       resetAnimPaths();
       currentStepIndex = 0;
     }
-    statusText.textContent = `${currentStepIndex + 1} かくめ / ${currentPaths.length} かく`;
+    statusText.textContent = (currentStepIndex + 1) + ' かくめ / ' + currentPaths.length + ' かく';
     animateSingleStroke(currentStepIndex, 500);
     currentStepIndex++;
   };
 
-  // 手書きキャンバス処理
-  const canvas = document.getElementById('draw-canvas');
-  const ctx = canvas.getContext('2d');
-  let isDrawing = false;
-  let penColor = '#222222';
+  var canvas = document.getElementById('draw-canvas');
+  var ctx = canvas.getContext('2d');
+  var isDrawing = false;
+  var penColor = '#222222';
 
   ctx.lineWidth = 14;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
 
   function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    var rect = canvas.getBoundingClientRect();
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
     return {
       x: (clientX - rect.left) * (canvas.width / rect.width),
       y: (clientY - rect.top) * (canvas.height / rect.height)
@@ -475,4 +458,75 @@
   function startDraw(e) {
     e.preventDefault();
     isDrawing = true;
-    const pos = getPos(e
+    var pos = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  }
+
+  function moveDraw(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    var pos = getPos(e);
+    ctx.strokeStyle = penColor;
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  }
+
+  function endDraw() {
+    isDrawing = false;
+  }
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', moveDraw);
+  window.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchmove', moveDraw, { passive: false });
+  canvas.addEventListener('touchend', endDraw);
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hanamaruEl.classList.remove('show');
+  }
+
+  document.getElementById('btn-clear').onclick = clearCanvas;
+  document.getElementById('btn-done').onclick = function() {
+    hanamaruEl.classList.add('show');
+    statusText.textContent = 'よくできました！';
+  };
+
+  document.querySelectorAll('.color-btn').forEach(function(btn) {
+    btn.onclick = function() {
+      document.querySelectorAll('.color-btn').forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      penColor = btn.dataset.color;
+    };
+  });
+
+  document.getElementById('toggle-teacher').onclick = function() {
+    var box = document.getElementById('teacher-box');
+    box.classList.toggle('open');
+  };
+
+  document.getElementById('generate-url-btn').onclick = function() {
+    var val = document.getElementById('custom-kanji-input').value.trim();
+    if (!val) return;
+    var baseUrl = window.location.origin + window.location.pathname;
+    var fullUrl = baseUrl + '?k=' + encodeURIComponent(val);
+    var urlBox = document.getElementById('generated-url-box');
+    urlBox.value = fullUrl;
+    urlBox.select();
+    try {
+      document.execCommand('copy');
+      document.getElementById('copy-msg').textContent = 'URLを作成・コピーしました！';
+    } catch (e) {
+      document.getElementById('copy-msg').textContent = '上の枠内のURLをコピーしてロイロノートに貼ってください。';
+    }
+  };
+
+  if (kanjiChars.length > 0) {
+    loadKanji(kanjiChars[0]);
+  }
+})();
+</script>
+</body>
+</html>
