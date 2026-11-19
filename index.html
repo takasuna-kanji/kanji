@@ -64,6 +64,76 @@
     width: 100%;
     max-width: 720px;
   }
+  .left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 340px;
+  }
+  /* 案C：読み方・言葉の例カード */
+  .reading-card {
+    background: #fff;
+    border: 2px solid #90caf9;
+    border-radius: 12px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .btn-reveal {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 2px dashed #64b5f6;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-reveal:active { transform: scale(0.98); }
+  .reading-content {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .reading-content.open {
+    display: flex;
+  }
+  .reading-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .badge {
+    font-size: 12px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+  }
+  .badge-on { background: #1e88e5; }
+  .badge-kun { background: #43a047; }
+  .badge-ex { background: #fb8c00; }
+  .example-text {
+    font-size: 16px;
+    color: #222;
+  }
+  .btn-hide-small {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: #78909c;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 2px 4px;
+    text-decoration: underline;
+  }
   .canvas-wrapper {
     position: relative;
     width: 340px;
@@ -240,20 +310,38 @@
 <header id="kanji-list"></header>
 
 <div class="main-area">
-  <div class="canvas-wrapper">
-    <svg class="grid-lines" viewBox="0 0 100 100">
-      <line x1="50" y1="0" x2="50" y2="100" stroke="#b0bec5" stroke-width="0.8" stroke-dasharray="2,2" />
-      <line x1="0" y1="50" x2="100" y2="50" stroke="#b0bec5" stroke-width="0.8" stroke-dasharray="2,2" />
-    </svg>
-    <div id="kanji-svg"></div>
-    <canvas id="draw-canvas" width="340" height="340"></canvas>
-    <div id="hanamaru">
-      <svg width="240" height="240" viewBox="0 0 200 200">
-        <path d="M100,20 C115,5 135,15 130,35 C150,25 165,45 150,60 C175,60 180,85 160,95 C180,105 175,130 150,130 C165,145 150,165 130,155 C135,175 115,185 100,170 C85,185 65,175 70,155 C50,165 35,145 50,130 C25,130 20,105 40,95 C20,85 25,60 50,60 C35,45 50,25 70,35 C65,15 85,5 100,20 Z" fill="none" stroke="#e91e63" stroke-width="6"/>
-        <circle cx="100" cy="95" r="45" fill="none" stroke="#e91e63" stroke-width="5"/>
-        <circle cx="100" cy="95" r="32" fill="none" stroke="#e91e63" stroke-width="4"/>
-        <text x="100" y="103" text-anchor="middle" fill="#e91e63" font-size="22" font-weight="bold">よくできました</text>
+  <div class="left-column">
+    <!-- 案C：押すと開く読み方＆言葉の例 -->
+    <div class="reading-card">
+      <button class="btn-reveal" id="btn-reveal">👀 よみかた・ことばを見る</button>
+      <div class="reading-content" id="reading-content">
+        <div class="reading-row">
+          <span><span class="badge badge-on">おん</span> <span id="on-text">―</span></span>
+          <span><span class="badge badge-kun">くん</span> <span id="kun-text">―</span></span>
+        </div>
+        <div class="reading-row">
+          <span class="badge badge-ex">れい</span>
+          <span class="example-text" id="example-text">―</span>
+        </div>
+        <button class="btn-hide-small" id="btn-hide">▲ かくす</button>
+      </div>
+    </div>
+
+    <div class="canvas-wrapper">
+      <svg class="grid-lines" viewBox="0 0 100 100">
+        <line x1="50" y1="0" x2="50" y2="100" stroke="#b0bec5" stroke-width="0.8" stroke-dasharray="2,2" />
+        <line x1="0" y1="50" x2="100" y2="50" stroke="#b0bec5" stroke-width="0.8" stroke-dasharray="2,2" />
       </svg>
+      <div id="kanji-svg"></div>
+      <canvas id="draw-canvas" width="340" height="340"></canvas>
+      <div id="hanamaru">
+        <svg width="240" height="240" viewBox="0 0 200 200">
+          <path d="M100,20 C115,5 135,15 130,35 C150,25 165,45 150,60 C175,60 180,85 160,95 C180,105 175,130 150,130 C165,145 150,165 130,155 C135,175 115,185 100,170 C85,185 65,175 70,155 C50,165 35,145 50,130 C25,130 20,105 40,95 C20,85 25,60 50,60 C35,45 50,25 70,35 C65,15 85,5 100,20 Z" fill="none" stroke="#e91e63" stroke-width="6"/>
+          <circle cx="100" cy="95" r="45" fill="none" stroke="#e91e63" stroke-width="5"/>
+          <circle cx="100" cy="95" r="32" fill="none" stroke="#e91e63" stroke-width="4"/>
+          <text x="100" y="103" text-anchor="middle" fill="#e91e63" font-size="22" font-weight="bold">よくできました</text>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -278,7 +366,7 @@
 <div class="teacher-panel">
   <button class="teacher-toggle" id="toggle-teacher">⚙ 先生用：あしたの漢字URLをつくる</button>
   <div class="teacher-box" id="teacher-box">
-    <div>練習させたい漢字を続けて入力してください（例：<b>海絵森星雲</b>）</div>
+    <div>練習させたい漢字を続けて入力してください（例：<b>野作海絵森</b>）</div>
     <div class="teacher-row">
       <input type="text" id="custom-kanji-input" placeholder="ここに漢字を入力">
       <button id="generate-url-btn">URLをつくる</button>
@@ -290,9 +378,173 @@
 
 <script>
 (function() {
+  // 小学2年生 全160字 辞書データ [音読み, 訓読み, 言葉の例]
+  var GRADE2_DICT = {
+    '引': ['イン', 'ひ(く)', '引く（ひく）・引っこし'],
+    '羽': ['ウ', 'は・はね', '羽（はね）・一羽（いちわ）'],
+    '雲': ['ウン', 'くも', '雲（くも）・入道雲'],
+    '園': ['エン', 'その', '公園（こうえん）・ようち園'],
+    '遠': ['エン', 'とお(い)', '遠い（とおい）・遠足（えんそく）'],
+    '何': ['カ', 'なに・なん', '何時（なんじ）・何か（なにか）'],
+    '科': ['カ', '―', '理科（りか）・さんすう科'],
+    '夏': ['カ', 'なつ', '夏休み（なつやすみ）・真夏'],
+    '家': ['カ・ケ', 'いえ・や', '家（いえ）・かぞくの家'],
+    '歌': ['カ', 'うた・うた(う)', '歌う（うたう）・国歌（こっか）'],
+    '画': ['ガ・カク', '―', '図画（ずが）・えいが画'],
+    '回': ['カイ', 'まわ(る)・まわ(す)', '回る（まわる）・一回目'],
+    '会': ['カイ', 'あ(う)', '会う（あう）・運動会'],
+    '海': ['カイ', 'うみ', '海（うみ）・海水よく'],
+    '絵': ['カイ・エ', '―', '絵（え）・絵本（えほん）'],
+    '外': ['ガイ・ゲ', 'そと・はず(れる)', '外（そと）・外国（がいこく）'],
+    '角': ['カク', 'かど・つの', '三角（さんかく）・かど'],
+    '楽': ['ガク・ラク', 'たの(しい)', '楽しい（たのしい）・音楽'],
+    '活': ['カツ', '―', '生活（せいかつ）・かつやく'],
+    '間': ['カン・ケン', 'あいだ・ま', '時間（じかん）・あいだ'],
+    '丸': ['ガン', 'まる・まる(い)', '丸い（まるい）・日の丸'],
+    '岩': ['ガン', 'いわ', '岩（いわ）・大きな岩'],
+    '顔': ['ガン', 'かお', '顔（かお）・えがお'],
+    '汽': ['キ', '―', '汽車（きしゃ）・きてき'],
+    '記': ['キ', 'しる(す)', '日記（にっき）・きろく'],
+    '帰': ['キ', 'かえ(る)', '帰る（かえる）・帰り道'],
+    '弓': ['キュウ', 'ゆみ', '弓矢（ゆみや）・弓なり'],
+    '牛': ['ギュウ', 'うし', '牛（うし）・ぎゅうにゅう'],
+    '魚': ['ギョ', 'うお・さかな', '魚（さかな）・金魚（きんぎょ）'],
+    '京': ['キョウ・ケイ', '―', '東京（とうきょう）・京都'],
+    '強': ['キョウ・ゴウ', 'つよ(い)', '強い（つよい）・べんきょう'],
+    '教': ['キョウ', 'おし(える)', '教える（おしえる）・教室'],
+    '近': ['キン', 'ちか(い)', '近い（ちかい）・近所（きんじょ）'],
+    '兄': ['ケイ・キョウ', 'あに', '兄（あに）・お兄さん'],
+    '形': ['ケイ・ギョウ', 'かた・かたち', '形（かたち）・三角形'],
+    '計': ['ケイ', 'はか(る)', '時計（とけい）・けいさん'],
+    '元': ['ゲン・ガン', 'もと', '元気（げんき）・元日'],
+    '言': ['ゲン・ゴン', 'い(う)・こと', '言う（いう）・言葉（ことば）'],
+    '原': ['ゲン', 'はら', '野原（のはら）・げんいん'],
+    '戸': ['コ', 'と', '戸（と）・あまど'],
+    '古': ['コ', 'ふる(い)', '古い（ふるい）・中古'],
+    '午': ['ゴ', '―', '午前（ごぜん）・午後（ごご）'],
+    '後': ['ゴ・コウ', 'のち・うし(ろ)・あと', '後ろ（うしろ）・午後'],
+    '語': ['ゴ', 'かた(る)', '国語（こくご）・物語'],
+    '工': ['コウ・ク', '―', '図工（ずこう）・工場'],
+    '公': ['コウ', 'おおやけ', '公園（こうえん）・こうみんかん'],
+    '広': ['コウ', 'ひろ(い)', '広い（ひろい）・広場（ひろば）'],
+    '交': ['コウ', 'まじ(わる)・か(わす)', '交通（こうつう）・こうさてん'],
+    '光': ['コウ', 'ひかり・ひか(る)', '光る（ひかる）・日光'],
+    '考': ['コウ', 'かんが(える)', '考える（かんがえる）・考え'],
+    '行': ['コウ・ギョウ', 'い(く)・ゆ(く)・おこな(う)', '行く（いく）・ぎょうれつ'],
+    '高': ['コウ', 'たか(い)', '高い（たかい）・最高'],
+    '黄': ['コウ・オウ', 'き', '黄色（きいろ）・きみどり'],
+    '合': ['ゴウ・ガッ', 'あ(う)', '合う（あう）・合図（あいず）'],
+    '谷': ['コク', 'たに', '谷（たに）・谷川（たにがわ）'],
+    '国': ['コク', 'くに', '国（くに）・国語（こくご）'],
+    '黒': ['コク', 'くろ・くろ(い)', '黒い（くろい）・黒板'],
+    '今': ['コン・キン', 'いま', '今日（きょう）・今（いま）'],
+    '才': ['サイ', '―', '七才（ななさい）・てんさい'],
+    '細': ['サイ', 'ほそ(い)・こま(かい)', '細い（ほそい）・細かい'],
+    '作': ['サク・サ', 'つく(る)', '作る（つくる）・作文（さくぶん）'],
+    '算': ['サン', '―', '算数（さんすう）・けいさん'],
+    '止': ['シ', 'と(まる)・と(める)', '止まる（とまる）・立ち止まる'],
+    '市': ['シ', 'いち', '市長（しちょう）・〇〇市'],
+    '矢': ['シ', 'や', '弓矢（ゆみや）・やじるし'],
+    '姉': ['シ', 'あね', '姉（あね）・お姉さん'],
+    '思': ['シ', 'おも(う)', '思う（おもう）・思い出'],
+    '紙': ['シ', 'かみ', '紙（かみ）・おりがみ'],
+    '寺': ['ジ', 'てら', 'お寺（おてら）・山寺'],
+    '自': ['ジ・シ', 'みずか(ら)', '自分（じぶん）・自転車'],
+    '時': ['ジ', 'とき', '時間（じかん）・時計（とけい）'],
+    '室': ['シツ', 'むろ', '教室（きょうしつ）・図書室'],
+    '社': ['シャ', 'やしろ', '会社（かいしゃ）・社会（しゃかい）'],
+    '弱': ['ジャク', 'よわ(い)', '弱い（よわい）・弱虫'],
+    '首': ['シュ', 'くび', '首（くび）・手首（てくび）'],
+    '秋': ['シュウ', 'あき', '秋（あき）・秋分の日'],
+    '週': ['シュウ', '―', '今週（こんしゅう）・一週間'],
+    '春': ['シュン', 'はる', '春（はる）・春休み'],
+    '書': ['ショ', 'か(く)', '書く（かく）・図書館'],
+    '少': ['ショウ', 'すく(ない)・すこ(し)', '少ない（すくない）・少し'],
+    '場': ['ジョウ', 'ば', '場所（ばしょ）・広場（ひろば）'],
+    '色': ['ショク・シキ', 'いろ', '色（いろ）・水色（みずいろ）'],
+    '食': ['ショク', 'た(べる)・く(う)', '食べる（たべる）・給食'],
+    '心': ['シン', 'こころ', '心（こころ）・安心（あんしん）'],
+    '新': ['シン', 'あたら(しい)', '新しい（あたらしい）・新聞'],
+    '親': ['シン', 'おや・した(しい)', '親（おや）・しんせつ'],
+    '図': ['ズ・ト', 'はか(る)', '図工（ずこう）・地図（ちず）'],
+    '数': ['スウ', 'かず・かぞ(える)', '数（かず）・算数（さんすう）'],
+    '西': ['セイ・サイ', 'にし', '西（にし）・西口（にしぐち）'],
+    '声': ['セイ', 'こえ', '声（こえ）・大声（おおごえ）'],
+    '星': ['セイ', 'ほし', '星（ほし）・流れ星'],
+    '晴': ['セイ', 'は(れる)', '晴れ（はれ）・晴れる'],
+    '切': ['セツ・サイ', 'き(る)', '切る（きる）・大切（たいせつ）'],
+    '雪': ['セツ', 'ゆき', '雪（ゆき）・雪だるま'],
+    '船': ['セン', 'ふね', '船（ふね）・ふうせん'],
+    '線': ['セン', '―', '直線（ちょくせん）・せんろ'],
+    '前': ['ゼン', 'まえ', '前（まえ）・午前（ごぜん）'],
+    '組': ['ソ', 'く(む)・くみ', '一組（ひとくみ）・組む'],
+    '走': ['ソウ', 'はし(る)', '走る（はしる）・競走'],
+    '多': ['タ', 'おお(い)', '多い（おおい）・たぶん'],
+    '太': ['タイ・タ', 'ふと(い)', '太い（ふとい）・太陽'],
+    '体': ['タイ・テイ', 'からだ', '体（からだ）・体育（たいいく）'],
+    '台': ['ダイ・タイ', '―', '台風（たいふう）・だいどころ'],
+    '地': ['チ・ジ', '―', '地図（ちず）・じめん'],
+    '池': ['チ', 'いけ', '池（いけ）・でんち'],
+    '知': ['チ', 'し(る)', '知る（しる）・お知らせ'],
+    '茶': ['チャ・サ', '―', 'お茶（おちゃ）・ちゃいろ'],
+    '昼': ['チュウ', 'ひる', '昼休み（ひるやすみ）・昼ごはん'],
+    '長': ['チョウ', 'なが(い)', '長い（ながい）・校長先生'],
+    '鳥': ['チョウ', 'とり', '鳥（とり）・小鳥（ことり）'],
+    '朝': ['チョウ', 'あさ', '朝（あさ）・今朝（けさ）'],
+    '直': ['チョク・ジキ', 'なお(す)・ただ(ちに)', '直す（なおす）・まっすぐ'],
+    '通': ['ツウ', 'とお(る)・かよ(う)', '通る（とおる）・通学路'],
+    '弟': ['テイ・ダイ', 'おとうと', '弟（おとうと）・兄弟'],
+    '店': ['テン', 'みせ', 'お店（おみせ）・店員さん'],
+    '点': ['テン', '―', '百点（ひゃくてん）・てんせん'],
+    '電': ['デン', '―', '電車（でんしゃ）・電気'],
+    '刀': ['トウ', 'かたな', '刀（かたな）・小刀'],
+    '冬': ['トウ', 'ふゆ', '冬（ふゆ）・冬休み'],
+    '当': ['トウ', 'あ(たる)', '当たる（あたる）・本当'],
+    '東': ['トウ', 'ひがし', '東（ひがし）・東京（とうきょう）'],
+    '答': ['トウ', 'こた(える)・こたえ', '答え（こたえ）・答える'],
+    '頭': ['トウ・ズ', 'あたま', '頭（あたま）・先頭'],
+    '同': ['ドウ', 'おな(じ)', '同じ（おなじ）・同時'],
+    '道': ['ドウ', 'みち', '道（みち）・どうぐ'],
+    '読': ['ドク・トク', 'よ(む)', '読む（よむ）・読書（どくしょ）'],
+    '内': ['ナイ', 'うち', '内側（うちがわ）・あんない'],
+    '南': ['ナン', 'みなみ', '南（みなみ）・南口'],
+    '肉': ['ニク', '―', 'お肉（おにく）・やきにく'],
+    '馬': ['バ', 'うま', '馬（うま）・しまうま'],
+    '売': ['バイ', 'う(る)', '売る（うる）・売り場'],
+    '買': ['バイ', 'か(う)', '買う（かう）・買い物'],
+    '麦': ['バク', 'むぎ', '麦茶（むぎちゃ）・小麦'],
+    '半': ['ハン', 'なか(ば)', '半分（はんぶん）・三時半'],
+    '番': ['バン', '―', '一番（いちばん）・ばんごう'],
+    '父': ['フ', 'ちち', '父（ちち）・お父さん'],
+    '風': ['フウ', 'かぜ', '風（かぜ）・台風（たいふう）'],
+    '分': ['ブン・フン・プン', 'わ(ける)・わ(かる)', '分かる（わかる）・十分'],
+    '聞': ['ブン・モン', 'き(く)', '聞く（きく）・新聞（しんぶん）'],
+    '米': ['ベイ・マイ', 'こめ', 'お米（おこめ）・米つぶ'],
+    '歩': ['ホ・ブ', 'ある(く)', '歩く（あるく）・さんぽ'],
+    '母': ['ボ', 'はは', '母（はは）・お母さん'],
+    '方': ['ホウ', 'かた', '夕方（ゆうがた）・やり方'],
+    '北': ['ホク', 'きた', '北（きた）・北風（きたかぜ）'],
+    '毎': ['マイ', '―', '毎日（まいにち）・まいあさ'],
+    '妹': ['マイ', 'いもうと', '妹（いもうと）・しまい'],
+    '万': ['マン・バン', '―', '一万（いちまん）・まんねんひつ'],
+    '明': ['メイ・ミョウ', 'あか(るい)', '明るい（あかるい）・明日'],
+    '鳴': ['メイ', 'な(く)・な(る)', '鳴く（なく）・鳴る（なる）'],
+    '毛': ['モウ', 'け', '毛（け）・けいと'],
+    '門': ['モン', 'かど', '校門（こうもん）・正門'],
+    '夜': ['ヤ', 'よ・よる', '夜（よる）・今夜（こんや）'],
+    '野': ['ヤ', 'の', '野原（のはら）・野球（やきゅう）'],
+    '友': ['ユウ', 'とも', '友だち（ともだち）・ゆうじん'],
+    '用': ['ヨウ', 'もち(いる)', '用事（ようじ）・ようい'],
+    '曜': ['ヨウ', '―', '月曜日（げつようび）・にちよう日'],
+    '来': ['ライ', 'く(る)', '来る（くる）・来年（らいねん）'],
+    '里': ['リ', 'さと', '里山（さとやま）・ふるさと'],
+    '理': ['リ', '―', '理科（りか）・りゆう'],
+    '話': ['ワ', 'はな(す)・はなし', '話す（はなす）・お話（おはなし）']
+  };
+
   var urlParams = new URLSearchParams(window.location.search);
   var kParam = urlParams.get('k');
-  var defaultKanji = ['海', '絵', '森', '星', '雲', '道'];
+  var defaultKanji = ['野', '作', '海', '絵', '森', '星'];
   var kanjiChars = (kParam && kParam.trim().length > 0)
     ? Array.from(kParam.trim()).slice(0, 12)
     : defaultKanji;
@@ -301,6 +553,54 @@
   var svgContainer = document.getElementById('kanji-svg');
   var statusText = document.getElementById('status-text');
   var hanamaruEl = document.getElementById('hanamaru');
+
+  // 案C 開閉UI
+  var btnReveal = document.getElementById('btn-reveal');
+  var btnHide = document.getElementById('btn-hide');
+  var readingContent = document.getElementById('reading-content');
+  var onText = document.getElementById('on-text');
+  var kunText = document.getElementById('kun-text');
+  var exampleText = document.getElementById('example-text');
+
+  btnReveal.onclick = function() {
+    btnReveal.style.display = 'none';
+    readingContent.classList.add('open');
+  };
+  btnHide.onclick = function() {
+    readingContent.classList.remove('open');
+    btnReveal.style.display = 'flex';
+  };
+
+  function resetReadingCard() {
+    readingContent.classList.remove('open');
+    btnReveal.style.display = 'flex';
+  }
+
+  function updateReadingData(char) {
+    resetReadingCard();
+    if (GRADE2_DICT[char]) {
+      onText.textContent = GRADE2_DICT[char][0];
+      kunText.textContent = GRADE2_DICT[char][1];
+      exampleText.textContent = GRADE2_DICT[char][2];
+    } else {
+      onText.textContent = 'よみこみ中...';
+      kunText.textContent = '―';
+      exampleText.textContent = '「' + char + '」の ことば';
+      fetch('https://kanjiapi.dev/v1/kanji/' + encodeURIComponent(char))
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) {
+          if (data) {
+            onText.textContent = (data.on_readings && data.on_readings.length > 0) ? data.on_readings.slice(0, 3).join('・') : '―';
+            kunText.textContent = (data.kun_readings && data.kun_readings.length > 0) ? data.kun_readings.slice(0, 3).join('・') : '―';
+          } else {
+            onText.textContent = '―';
+          }
+        })
+        .catch(function() {
+          onText.textContent = '―';
+        });
+    }
+  }
 
   var currentPaths = [];
   var currentStepIndex = 0;
@@ -322,6 +622,7 @@
     clearTimers();
     clearCanvas();
     hanamaruEl.classList.remove('show');
+    updateReadingData(char);
     statusText.textContent = '「' + char + '」を よみこみ中...';
 
     var hex = char.codePointAt(0).toString(16).padStart(5, '0');
